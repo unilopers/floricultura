@@ -40,4 +40,20 @@ public class Cliente {
     @OneToOne
     @JoinColumn(name = "FK_IdUsuario", referencedColumnName = "id")
     private Usuario usuario;
+
+    @PrePersist
+    @PreUpdate
+    private void validarCPF() {
+        if (cpf == null || cpf.isBlank()) {
+            throw new IllegalArgumentException("CPF é obrigatório.");
+        }
+
+        if (!cpf.matches("\\d{11}")) {
+            throw new IllegalArgumentException("CPF deve conter exatamente 11 dígitos numéricos.");
+        }
+
+        if (cpf.chars().distinct().count() == 1) {
+            throw new IllegalArgumentException("CPF inválido.");
+        }
+    }
 }

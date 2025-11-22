@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Novo Cliente</title>
+</head>
+<body>
+
+<h1>Novo Cliente</h1>
+
+<form action="/clientes" method="post" th:object="${cliente}">
+
+    Nome: <input type="text" th:field="*{nome}" required><br><br>
+
+    Email: <input type="email" th:field="*{email}"><br><br>
+
+    Data de Nascimento: <input type="date" th:field="*{dataNascimento}"><br><br>
+
+    Endereço: <input type="text" th:field="*{endereco}"><br><br>
+
+    CEP: <input type="text" th:field="*{cep}"><br><br>
+
+    Telefone: <input type="text" th:field="*{telefone}"><br><br>
+
+    CPF: <input type="text" th:field="*{cpf}"><br><br>
+
+    <button type="submit">Salvar</button>
+</form>
+
+</body>
+</html>
