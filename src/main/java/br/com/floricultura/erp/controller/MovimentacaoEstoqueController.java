@@ -11,7 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/movimentacoes")
 @RequiredArgsConstructor
-public class MovimentacaoController {
+public class MovimentacaoEstoqueController {
 
     private final MovimentacaoEstoqueRepository repository;
 
