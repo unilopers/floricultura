@@ -19,8 +19,8 @@ public class MovimentacaoEstoqueService {
     }
 
     public MovimentacaoEstoque salvar(MovimentacaoEstoque movimento) {
-        if (movimento.getDataMovimentacao() == null) {
-            movimento.setDataMovimentacao(LocalDateTime.now());
+        if (movimento.getDataHora() == null) {
+            movimento.setDataHora(LocalDateTime.now());
         }
         return repository.save(movimento);
     }
