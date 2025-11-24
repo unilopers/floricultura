@@ -2,57 +2,38 @@ package br.com.floricultura.erp.controller;
 
 import br.com.floricultura.erp.model.Produto;
 import br.com.floricultura.erp.services.ProdutoService;
-import br.com.floricultura.erp.services.FornecedorService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Controller
+@RestController
+@RequestMapping("/api/produtos")
+@RequiredArgsConstructor
 public class ProdutoController {
 
-    @Autowired
-    private ProdutoService produtoService;
+    private final ProdutoService service;
 
-    @Autowired
-    private FornecedorService fornecedorService;
-
-    @GetMapping("/produtos")
-    public String listar(Model model) {
-        model.addAttribute("produtos", produtoService.listarTodos());
-        return "produtos/lista";
+    @GetMapping
+    public ResponseEntity<List<Produto>> listar() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    @GetMapping("/produtos/novo")
-    public String novo(Model model) {
-        model.addAttribute("produto", new Produto());
-        model.addAttribute("fornecedores", fornecedorService.listarTodos());
-        model.addAttribute("atualizar", false);
-        return "produtos/cadastro";
+    @GetMapping("/{id}")
+    public ResponseEntity<Produto> buscar(@PathVariable Long id) {
+        return service.buscarPorId(id)
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/produtos/editar/{id}")
-    public String editar(@PathVariable Long id, Model model) {
-        Produto produto = produtoService.buscarPorId(id).orElse(new Produto());
-
-        model.addAttribute("produto", produto);
-        model.addAttribute("fornecedores", fornecedorService.listarTodos());
-        model.addAttribute("atualizar", true);
-        return "produtos/cadastro";
+    @PostMapping
+    public ResponseEntity<Produto> salvar(@RequestBody Produto produto) {
+        return ResponseEntity.ok(service.salvar(produto));
     }
 
-    @PostMapping("/produtos/salvar")
-    public String salvar(Produto produto) {
-        produtoService.salvar(produto);
-        return "redirect:/produtos";
-    }
-
-    @GetMapping("/produtos/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        produtoService.excluir(id);
-        return "redirect:/produtos";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }
