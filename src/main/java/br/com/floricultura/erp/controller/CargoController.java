@@ -3,48 +3,35 @@ package br.com.floricultura.erp.controller;
 import br.com.floricultura.erp.model.Cargo;
 import br.com.floricultura.erp.services.CargoService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-@Controller
-@RequestMapping("/cargos")
+@RestController
+@RequestMapping("/api/cargos")
 @RequiredArgsConstructor
 public class CargoController {
 
     private final CargoService service;
 
     @GetMapping
-    public String listar(Model model) {
-        model.addAttribute("listaCargos", service.listarTodos());
-        return "cargo/lista";
+    public ResponseEntity<List<Cargo>> listar() {
+        return ResponseEntity.ok(service.listarTodos());
     }
 
-    @GetMapping("/novo")
-    public String novo(Model model) {
-        model.addAttribute("cargo", new Cargo());
-        return "cargo/form";
+    @PostMapping
+    public ResponseEntity<Cargo> salvar(@RequestBody Cargo cargo) {
+        return ResponseEntity.ok(service.salvar(cargo));
     }
 
-    @PostMapping("/salvar")
-    public String salvar(@ModelAttribute Cargo cargo) {
-        service.salvar(cargo);
-        return "redirect:/cargos";
+    @GetMapping("/{id}")
+    public ResponseEntity<Cargo> buscar(@PathVariable Long id) {
+        return ResponseEntity.ok(service.buscarPorId(id));
     }
 
-    @GetMapping("/editar/{id}")
-    public String editar(@PathVariable Long id, Model model) {
-        model.addAttribute("cargo", service.buscarPorId(id));
-        return "cargo/form";
-    }
-
-    @GetMapping("/excluir/{id}")
-    public String excluir(@PathVariable Long id) {
-        try {
-            service.excluir(id);
-        } catch (Exception e) {
-            return "redirect:/cargos?erro=true";
-        }
-        return "redirect:/cargos";
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> excluir(@PathVariable Long id) {
+        service.excluir(id);
+        return ResponseEntity.noContent().build();
     }
 }
