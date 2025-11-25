@@ -21,7 +21,6 @@ public class ProdutoService {
         return repository.save(produto);
     }
 
-    // Método auxiliar para buscar por ID (necessário no Controller)
     public Optional<Produto> buscarPorId(Long id) {
         return repository.findById(id);
     }
