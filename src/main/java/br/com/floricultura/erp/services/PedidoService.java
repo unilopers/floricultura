@@ -7,10 +7,10 @@ import br.com.floricultura.erp.repository.ProdutoRepository;
 
 import org.springframework.stereotype.Service;
 import lombok.RequiredArgsConstructor;
-
+import java.util.List;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-
+import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class PedidoService {
@@ -45,5 +45,13 @@ public class PedidoService {
         }
 
         return saved;
+    }
+
+    public List<Pedido> listarTodos() {
+        return pedidoRepository.findAll();
+    }
+
+    public Optional<Pedido> buscarPorId(Long id) {
+        return pedidoRepository.findById(id);
     }
 }

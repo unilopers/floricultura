@@ -1,7 +1,7 @@
 package br.com.floricultura.erp.model;
-
 import jakarta.persistence.*;
 import lombok.*;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.math.BigDecimal;
 
 @Entity
@@ -23,6 +23,7 @@ public class PedidoItem {
 
     @ManyToOne
     @JoinColumn(name = "FK_IdPedido", nullable = false)
+    @JsonIgnore
     private Pedido pedido;
 
     @ManyToOne
