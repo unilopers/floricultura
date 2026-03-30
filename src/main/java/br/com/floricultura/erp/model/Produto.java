@@ -34,6 +34,10 @@ public class Produto {
     @Column(nullable = false)
     private Integer quantidadeEstoque;
 
+    // ✅ ADICIONADO (seu worker depende disso)
+    @Column(name = "limite_estoque_minimo")
+    private Integer limiteEstoqueMinimo;
+
     @Column(name = "validade")
     private LocalDate validade;
 

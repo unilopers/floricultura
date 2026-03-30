@@ -1,5 +1,6 @@
 package br.com.floricultura.erp.services;
 
+import br.com.floricultura.erp.async.StockAlertWorker;
 import br.com.floricultura.erp.model.Produto;
 import br.com.floricultura.erp.repository.ProdutoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +14,19 @@ public class ProdutoService {
     @Autowired
     private ProdutoRepository repository;
 
+    @Autowired
+    private StockAlertWorker stockAlertWorker;
+
     public List<Produto> listarTodos() {
         return repository.findAll();
     }
 
     public Produto salvar(Produto produto) {
-        return repository.save(produto);
+        Produto savedProduto = repository.save(produto);
+
+        stockAlertWorker.checkStockLevel(savedProduto);
+
+        return savedProduto;
     }
 
     public Optional<Produto> buscarPorId(Long id) {
